@@ -8,9 +8,6 @@
     const morseEnglish = JSON.parse(FS.readFileSync("./assets/english.json"), "utf8");
     const morseJapanese = JSON.parse(FS.readFileSync("./assets/japanese.json"), "utf8");
 
-    console.log(morseEnglish);
-    console.log(morseJapanese);
-    
 /* ログイン処理 */
     Client.login(Token.discord);
 
@@ -20,9 +17,15 @@
     });
   
     Client.on("message", message => {
-        if (message.content === "関口!" || message.content === "キャプテン!") {
-            message.reply("翼!");
-        } else if(message.content === "益若!") {
-            message.reply("つばさ!");
+        if(message.member.id != 380359638996090880) {
+            let returnMessage = ""; // 返すメッセージ
+            Object.keys(morseEnglish).forEach(function(key) {
+                if(returnMessage === "") {
+                    returnMessage = message.content.split(key).join(morseEnglish[key] + "　");
+                } else {
+                    returnMessage = returnMessage.split(key).join(morseEnglish[key] + "　");
+                }
+            });
+            message.channel.send("`" + returnMessage + "`");
         }
     });
